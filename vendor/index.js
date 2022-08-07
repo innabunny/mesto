@@ -3,10 +3,10 @@ let profileName = document.querySelector('.profile__name');
 let profileAbout = document.querySelector('.profile__about');
 
 let popup = document.querySelector('.popup');
-let closeButton = popup.querySelector('.popup__button_type_close');
+let closeButton = popup.querySelector('.popup__button-close');
 let inputName = popup.querySelector('.popup__input_type_name');
 let inputAbout = popup.querySelector('.popup__input_type_about');
-let submitButton = popup.querySelector('.popup__button_type_submit');
+let submitButton = popup.querySelector('.popup__button-submit');
 
 
 function openPopup() {
