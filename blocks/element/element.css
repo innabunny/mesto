@@ -1,6 +1,6 @@
 .element{
   width: 282px;
-  height: 362px;
+  max-height: 362px;
   background-color: white;
   margin: 0 auto;
   padding: 0;
