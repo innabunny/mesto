@@ -1,4 +1,5 @@
 .element{
+  position: relative;
   width: 282px;
   max-height: 362px;
   background-color: white;
