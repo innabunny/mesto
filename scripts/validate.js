@@ -11,7 +11,7 @@ const validationConfig = {
 
 function toggleButtonState(inputList, buttonElement, config) {
   if(hasInvalidInput(inputList)){
-    setButtonDisabled(buttonElement);
+    setButtonDisabled(buttonElement, config);
   } else {
     buttonElement.classList.remove(config.inactiveButtonClass);
     buttonElement.removeAttribute('disabled', 'disabled');
@@ -32,8 +32,8 @@ function hideInputError(formElement, inputElement, config) {
   errorElement.classList.remove(config.errorClassActive);
 }
 
-function setButtonDisabled (buttonElement) {
-  buttonElement.classList.add(validationConfig.inactiveButtonClass);
+function setButtonDisabled (buttonElement, config) {
+  buttonElement.classList.add(config.inactiveButtonClass);
   buttonElement.setAttribute('disabled', 'disabled');
 }
 

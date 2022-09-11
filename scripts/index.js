@@ -45,8 +45,6 @@ function createCard({name, link}) {
 initialCards.forEach(item => {elements.prepend(createCard(item));});
 
 function openPopup(popup) {
-  const buttonSubmit = popup.querySelector('.popup__button-submit');
-  setButtonDisabled(buttonSubmit);
   popup.classList.add('popup_open');
   document.addEventListener('keydown', handleKeypressEsc);
 }
@@ -73,8 +71,11 @@ function callbackEditProfileForm(event) {
 function callbackPopupAddCard(event) {
   event.preventDefault();
   const card = createCard({name: popupAddName.value, link: popupAddLink.value});
+  const buttonSubmit = event.target.querySelector('.popup__button-submit');
+  console.log(buttonSubmit);
   event.target.reset();
   elements.prepend(card);
+  setButtonDisabled(buttonSubmit, validationConfig);
   closePopup(popupAddCard);
 }
 
