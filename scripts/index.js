@@ -1,3 +1,6 @@
+import {initialCards} from "./InitialCards";
+import Card from "./Card";
+
 const elements = document.querySelector('.elements');
 const elementCard = document.querySelector('#element-card');
 
@@ -20,26 +23,40 @@ const popupTypeImage = document.querySelector('.popup_type_image');
 const popupImage = document.querySelector('.popup__image');
 const popupImageCaption = document.querySelector('.popup__image-caption');
 
+const validationConfig = {
+  formSelector: '.popup__form',
+  inputSelector: '.popup__input',
+  submitButtonSelector: '.popup__button-submit',
+  inactiveButtonClass: 'popup__button-submit_inactive',
+  inputErrorClass: 'popup__input_type_error',
+  errorClass: 'popup__input-error',
+  errorClassActive: 'popup__input-error_active',
+}
+const handleFullImage = ({name, link}) => {
+  popupImage.src = link;
+  popupImage.alt = name;
+  popupImageCaption.textContent = name;
+  openPopup(popupTypeImage);
+}
 
-function createCard({name, link}) {
-  const cardElement = elementCard.content.cloneNode(true);
-  const elementImage = cardElement.querySelector('.element__image');
-  const elementTitle = cardElement.querySelector('.element__title');
-  const buttonLike = cardElement.querySelector('.element__button-like');
-  const buttonDelete = cardElement.querySelector('.element__button-delete');
-  const elementImageCopy = cardElement.querySelector('.element__image');
-  elementImage.src = link;
-  elementImage.alt= name;
-  elementTitle.textContent = name;
-  buttonLike.addEventListener('click', (event) =>
-    buttonLike.classList.toggle('element__button-like_active'));
-  buttonDelete.addEventListener('click', (event) =>
-    buttonDelete.closest('.element').remove());
-  elementImageCopy.addEventListener('click', event => {
-    openFullImage({name, link});
-  });
-
-  return cardElement;
+function createCard(item) {
+  // const cardElement = elementCard.content.cloneNode(true);
+  // const elementImage = cardElement.querySelector('.element__image');
+  // const elementTitle = cardElement.querySelector('.element__title');
+  // const buttonLike = cardElement.querySelector('.element__button-like');
+  // const buttonDelete = cardElement.querySelector('.element__button-delete');
+  // const elementImageCopy = cardElement.querySelector('.element__image');
+  // elementImage.src = link;
+  // elementImage.alt= name;
+  // elementTitle.textContent = name;
+  // buttonLike.addEventListener('click', (event) =>
+  //   buttonLike.classList.toggle('element__button-like_active'));
+  // buttonDelete.addEventListener('click', (event) =>
+  //   buttonDelete.closest('.element').remove());
+  // elementImageCopy.addEventListener('click', event => {
+  //   openFullImage({name, link});
+  // });
+  return new Card(item, '.element-card', handleFullImage).generateCard();
 }
 
 initialCards.forEach(item => {elements.prepend(createCard(item));});
