@@ -2,7 +2,7 @@ export class FormValidator {
   constructor(config, formElement) {
     this._config = config;
     this._formElement = formElement;
-
+    this._buttonElement = this._formElement.querySelector(this._config.submitButtonSelector);
   }
 
   _showInputError(inputElement) {
@@ -21,7 +21,6 @@ export class FormValidator {
 
   _setEventListeners() {
     this._inputList = Array.from(this._formElement.querySelectorAll(this._config.inputSelector));
-    this._buttonElement = this._formElement.querySelector(this._config.submitButtonSelector);
     this._toggleButtonState();
 
     this._inputList.forEach((inputElement) => {

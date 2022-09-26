@@ -1,4 +1,4 @@
-import {initialCards} from "../scripts/InitialCards.js";
+import {initialCards} from "scripts/initialCards.js";
 import {Card} from "../scripts/Card.js";
 import {FormValidator} from "../scripts/FormValidator.js";
 
@@ -32,6 +32,7 @@ const validationConfig = {
   errorClass: 'popup__input-error',
   errorClassActive: 'popup__input-error_active',
 }
+
 const formEditValidator = new FormValidator(validationConfig, popupEditForm);
 const formAddValidator = new FormValidator(validationConfig, popupAddForm);
 
@@ -84,7 +85,6 @@ function callbackPopupAddCard(event) {
   closePopup(popupAddCard);
 }
 
-
 function handleKeypressEsc (event)  {
   if(event.key === 'Escape') {
     const activePopup = document.querySelector('.popup_open');
@@ -92,15 +92,12 @@ function handleKeypressEsc (event)  {
   }
 }
 
-
-
 Array.from(popups).forEach(popup => {
   popup.addEventListener('click', event => {
     if(event.target.classList.contains('popup') || event.target.classList.contains('popup__button-close'))
       closePopup(popup);
   })
 });
-
 
 buttonAddCardProfile.addEventListener('click', () => openPopup(popupAddCard));
 buttonEditProfile.addEventListener('click', editProfileForm);
