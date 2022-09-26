@@ -1,21 +1,21 @@
-import {initialCards} from "./InitialCards";
-import Card from "./Card";
+import {initialCards} from "../scripts/InitialCards.js";
+import {Card} from "../scripts/Card.js";
+import {FormValidator} from "../scripts/FormValidator.js";
 
 const elements = document.querySelector('.elements');
-const elementCard = document.querySelector('#element-card');
 
 const buttonEditProfile = document.querySelector('.profile__button-edit');
 const buttonAddCardProfile = document.querySelector('.profile__button-add');
 const profileName = document.querySelector('.profile__name');
 const profileAbout = document.querySelector('.profile__about');
-const popupEditForm = document.querySelector('.popup__form');
 
 const popups = document.querySelectorAll('.popup');
+const popupEditForm = document.querySelector('.popup__form_type_edit');
 const popupEdit = document.querySelector('.popup_type_profile');
 const inputName = document.querySelector('.popup__input_type_name');
 const inputAbout = document.querySelector('.popup__input_type_about');
 const popupAddCard = document.querySelector('.popup_type_card-add');
-const popupAddForm = popupAddCard.querySelector('.popup__form');
+const popupAddForm = popupAddCard.querySelector('.popup__form_type_add');
 const popupAddName = popupAddCard.querySelector('.popup__input_type_name');
 const popupAddLink = popupAddCard.querySelector('.popup__input_type_link');
 
@@ -32,7 +32,13 @@ const validationConfig = {
   errorClass: 'popup__input-error',
   errorClassActive: 'popup__input-error_active',
 }
-const handleFullImage = ({name, link}) => {
+const formEditValidator = new FormValidator(validationConfig, popupEditForm);
+const formAddValidator = new FormValidator(validationConfig, popupAddForm);
+
+formEditValidator.enabledValidation();
+formAddValidator.enabledValidation();
+
+function openFullImage (name, link) {
   popupImage.src = link;
   popupImage.alt = name;
   popupImageCaption.textContent = name;
@@ -40,23 +46,7 @@ const handleFullImage = ({name, link}) => {
 }
 
 function createCard(item) {
-  // const cardElement = elementCard.content.cloneNode(true);
-  // const elementImage = cardElement.querySelector('.element__image');
-  // const elementTitle = cardElement.querySelector('.element__title');
-  // const buttonLike = cardElement.querySelector('.element__button-like');
-  // const buttonDelete = cardElement.querySelector('.element__button-delete');
-  // const elementImageCopy = cardElement.querySelector('.element__image');
-  // elementImage.src = link;
-  // elementImage.alt= name;
-  // elementTitle.textContent = name;
-  // buttonLike.addEventListener('click', (event) =>
-  //   buttonLike.classList.toggle('element__button-like_active'));
-  // buttonDelete.addEventListener('click', (event) =>
-  //   buttonDelete.closest('.element').remove());
-  // elementImageCopy.addEventListener('click', event => {
-  //   openFullImage({name, link});
-  // });
-  return new Card(item, '.element-card', handleFullImage).generateCard();
+  return new Card(item, '.element-card', openFullImage).generateCard();
 }
 
 initialCards.forEach(item => {elements.prepend(createCard(item));});
@@ -88,21 +78,12 @@ function callbackEditProfileForm(event) {
 function callbackPopupAddCard(event) {
   event.preventDefault();
   const card = createCard({name: popupAddName.value, link: popupAddLink.value});
-  const buttonSubmit = event.target.querySelector('.popup__button-submit');
-  console.log(buttonSubmit);
   event.target.reset();
   elements.prepend(card);
-  setButtonDisabled(buttonSubmit, validationConfig);
+  formAddValidator.disabledButton();
   closePopup(popupAddCard);
 }
 
-function openFullImage(item){
-  event.preventDefault();
-  popupImage.src = item.link;
-  popupImage.alt = `${item.name}`;
-  popupImageCaption.textContent = item.name;
-  openPopup(popupTypeImage);
-}
 
 function handleKeypressEsc (event)  {
   if(event.key === 'Escape') {

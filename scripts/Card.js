@@ -1,21 +1,21 @@
-export default class Card {
-  constructor(data, templateSelector, openedFullImage) {
-    this._title = data.title;
+export class Card {
+  constructor(data, templateSelector, FullImage) {
+    this._name = data.name;
     this._link = data.link;
     this._templateSelector = templateSelector;
-    this._openedFullImage = openedFullImage;
+    this._FullImage = FullImage;
   }
 
   _getTemplate() {
     return document
       .querySelector(this._templateSelector)
       .content
-      .querySelector('.elements')
+      .querySelector('.element')
       .cloneNode(true);
   }
 
   _openFullImageHandler() {
-    this._openedFullImage(this._title, this._link);
+    this._FullImage(this._name, this._link);
   }
 
   _clickButtonDeleteHandler() {
@@ -49,8 +49,8 @@ export default class Card {
     this._elementImage = this._element.querySelector('.element__image');
     this._elementTitle = this._element.querySelector('.element__title');
     this._elementImage.src = this._link;
-    this._elementImage.alt = this._title;
-    this._elementTitle.textContent = this._title;
+    this._elementImage.alt = this._name;
+    this._elementTitle.textContent = this._name;
 
     this._setEventListeners();
 
