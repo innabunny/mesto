@@ -1,21 +1,19 @@
-export class Card {
-  constructor(data, templateSelector, clickImageCallback) {
-    this._name = data.name;
-    this._link = data.link;
+export default class Card {
+  constructor({name, link}, templateSelector, handleCardClick) {
+    this._name = name;
+    this._link = link;
     this._templateSelector = templateSelector;
-    this._clickImageCallback = clickImageCallback;
+    this._handleCardClick = handleCardClick;
   }
 
   _getTemplate() {
-    return document
+    const cardElement = document
       .querySelector(this._templateSelector)
       .content
       .querySelector('.element')
       .cloneNode(true);
-  }
 
-  _openFullImageHandler() {
-    this._clickImageCallback(this._name, this._link);
+    return cardElement;
   }
 
   _clickButtonDeleteHandler() {
@@ -40,7 +38,10 @@ export class Card {
     });
 
     this._elementImage.addEventListener('click', () => {
-      this._openFullImageHandler();
+      this._handleCardClick({
+        name: this._name,
+        link: this._link
+      });
     });
   }
 
@@ -54,5 +55,4 @@ export class Card {
     this._setEventListeners();
     return this._element;
   }
-
 }
