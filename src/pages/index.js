@@ -20,7 +20,6 @@ import {
   inputAbout,
   } from "../utils/constants.js";
 
-
 const api = new Api({url: apiConfig.baseUrl,
   headers: {
     authorization: apiConfig.headers,
@@ -77,14 +76,11 @@ function createCard(cardData, userId) {
   return cardElement;
 }
 
-
 const popupFullImage = new PopupWithImage('.popup_type_image');
 popupFullImage.setEventListeners();
 
 const popupDeleteCard =  new PopupWithConfirm('.popup_type_delete');
 popupDeleteCard.setEventListeners();
-
-
 
 const userProfile = new UserInfo(
   {nameSelector: '.profile__name', aboutSelector: '.profile__about'});
@@ -166,8 +162,6 @@ const formAvatarValidator = new FormValidator(validationConfig, formChangeAvatar
 formEditValidator.enabledValidation();
 formAddValidator.enabledValidation();
 formAvatarValidator.enabledValidation();
-
-
 
 let cardList;
 Promise.all([
