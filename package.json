@@ -1,8 +1,8 @@
 {
-  "name": "yandex.praktikum",
+  "name": "mesto",
   "version": "0.0.1",
   "description": "Learning platform",
-  "main": "index.js",
+  "main": "./src/pages/index.js",
   "scripts": {
     "build": "webpack --mode production",
     "dev": "webpack serve",
