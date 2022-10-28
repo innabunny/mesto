@@ -22,7 +22,7 @@
 **Ссылка на работу**
 
 
-* [Ссылка на GHpages](https://innabunny.github.io/mesto)
+* [Ссылка на GHpages](https://innabunny.github.io/mesto/)
 
 
 
