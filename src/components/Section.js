@@ -5,7 +5,7 @@ export default class Section {
   }
   renderItems(items) {
     items.forEach((item) => {
-      const card = this._renderer(item);
+      this._renderer(item);
     });
   }
   prependItem (item) {

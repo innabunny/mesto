@@ -8,17 +8,17 @@ import PopupWithImage from "../components/PopupWithImage.js";
 import PopupWithForm from "../components/PopupWithForm.js";
 import UserInfo from "../components/UserInfo.js";
 import {
-  validationConfig,
   apiConfig,
-  buttonEditProfile,
   buttonAddCard,
   buttonAvatarEdit,
-  formEditProfile,
+  buttonEditProfile,
   formAddCard,
   formChangeAvatar,
-  inputName,
+  formEditProfile,
   inputAbout,
-  } from "../utils/constants.js";
+  inputName,
+  validationConfig,
+} from "../utils/constants.js";
 
 const api = new Api({url: apiConfig.baseUrl,
   headers: {
@@ -27,9 +27,8 @@ const api = new Api({url: apiConfig.baseUrl,
   },
 });
 
-function createCard(cardData, userId) {
-  cardData._userId = userId;
-  const card = new Card(cardData, '.element-card',
+function createCard(cardData) {
+  const card = new Card(cardData, userProfile.getUserId(),'.element-card',
     () => {
       popupFullImage.open(cardData);
     },
@@ -53,8 +52,7 @@ function createCard(cardData, userId) {
       if (card.getLikesState()) {
         api.deleteLike(cardId)
           .then((res) => {
-            card.setLikesCounter(res.likes.length);
-            card.likeToggle();
+            card.removeLike(res.likes.length);
           })
           .catch((err) => {
             console.log(err);
@@ -62,8 +60,7 @@ function createCard(cardData, userId) {
       } else {
         api.putLike(cardId)
           .then((res) => {
-            card.setLikesCounter(res.likes.length);
-            card.likeToggle();
+            card.setLike(res.likes.length);
           })
           .catch((err) => {
             console.log(err);
@@ -72,8 +69,7 @@ function createCard(cardData, userId) {
     }
   );
 
-  const cardElement = card.generateCard();
-  return cardElement;
+  return card.generateCard();
 }
 
 const popupFullImage = new PopupWithImage('.popup_type_image');
@@ -83,7 +79,7 @@ const popupDeleteCard =  new PopupWithConfirm('.popup_type_delete');
 popupDeleteCard.setEventListeners();
 
 const userProfile = new UserInfo(
-  {nameSelector: '.profile__name', aboutSelector: '.profile__about'});
+  {nameSelector: '.profile__name', aboutSelector: '.profile__about', avatarSelector: '.profile__image'});
 
 const popupChangeAvatar = new PopupWithForm('.popup_type_avatar',
   (data) => {
@@ -91,9 +87,8 @@ const popupChangeAvatar = new PopupWithForm('.popup_type_avatar',
   api.changeAvatar(data.link)
     .then((res) => {
       userProfile.updateAvatar(res);
-      popupChangeAvatar.close();
-      formAvatarValidator.disabledButton();
     })
+    .then(() => {popupChangeAvatar.close();})
     .catch((err) => {
       console.log(err);
     })
@@ -109,8 +104,8 @@ const popupEditProfile = new PopupWithForm('.popup_type_profile', (data) => {
   api.editUserInfo(data)
     .then(() => {
       userProfile.setUserInfo(data);
-      popupEditProfile.close();
     })
+    .then(() => { popupEditProfile.close();})
     .catch((err) => {
       console.log(err);
     })
@@ -122,13 +117,13 @@ const popupEditProfile = new PopupWithForm('.popup_type_profile', (data) => {
 popupEditProfile.setEventListeners();
 
 buttonAvatarEdit.addEventListener('click', () => {
+  formAvatarValidator.resetValidation();
   popupChangeAvatar.open();
 });
 
 buttonEditProfile.addEventListener('click', (event) => {
-  const userData = userProfile.getUserInfo();
-  inputName.value = userData.name;
-  inputAbout.value = userData.about;
+  formEditValidator.resetValidation();
+  popupEditProfile.setInputValues(userProfile.getUserInfo());
   popupEditProfile.open();
 })
 
@@ -136,11 +131,10 @@ const popupAddNewCard = new PopupWithForm('.popup_type_card-add', (data) => {
   popupAddNewCard.renderLoading(true);
   api.addCard(data)
     .then((res) => {
-      const cardElement = createCard(res, userProfile.userId);
+      const cardElement = createCard(res, userProfile.getUserId());
       cardList.prependItem(cardElement);
-      popupAddNewCard.close();
-      formAddValidator.disabledButton();
     })
+    .then(() => {popupAddNewCard.close();})
     .catch((err) => {
       console.log(err);
     })
@@ -152,6 +146,7 @@ const popupAddNewCard = new PopupWithForm('.popup_type_card-add', (data) => {
 popupAddNewCard.setEventListeners();
 
 buttonAddCard.addEventListener('click', () => {
+  formAddValidator.resetValidation();
   popupAddNewCard.open();
 })
 
@@ -173,7 +168,7 @@ Promise.all([
   userProfile.setUserInfo(userData);
 
   cardList = new Section((item) => {
-    const cardElement = createCard(item, userProfile.userId);
+    const cardElement = createCard(item, userProfile.getUserId());
     cardList.appendItem(cardElement)
   }, '.elements');
   cardList.renderItems(initialCards);
